@@ -18,8 +18,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.smarcityv1.CivicIssuesChatBot.CivicChatBot
-import com.example.smarcityv1.MentalHealthChatBot.ChatBot
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -91,15 +89,9 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
                 showBars = true
                 MainContent(paddingValues, viewModel, navController)
             }
-            composable("chatBotScreen") {
-                showBars = false
-                ChatBot()
-            }
 
-            composable("CivicIssueChatBot"){
-                showBars = false
-                CivicChatBot()
-            }
+
+
 
             composable("mapScreen") {
                 showBars = false
