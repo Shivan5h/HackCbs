@@ -31,7 +31,6 @@ import androidx.navigation.NavController
 
 @Composable
 fun FeatureCards(navController: NavController) {
-    // Get screen height to calculate 40% of it
     val screenHeight = LocalConfiguration.current.screenHeightDp
     val top40Height = (screenHeight * 0.4).dp  // 40% of screen height
 
@@ -49,8 +48,8 @@ fun FeatureCards(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FeatureCard("AR Navigator", modifier = Modifier.weight(1f)){
-                navController.navigate("mapScreen")
+            FeatureCard("Treatment ", modifier = Modifier.weight(1f)){
+                navController.navigate("TreatmentScreen")
             }
             FeatureCard("Register Complaints", modifier = Modifier.weight(1f)){
                 navController.navigate("ComplainChatbot")
@@ -66,9 +65,9 @@ fun FeatureCards(navController: NavController) {
             FeatureCard("Document Summerizer", modifier = Modifier.weight(1f)) {
                 navController.navigate("simplifierScreen") // Navigate to ChatBotScreen
             }
-            FeatureCard("Govt Schemes", modifier = Modifier.weight(1f)){
+            FeatureCard("Government Poll", modifier = Modifier.weight(1f)){
                 try {
-                    navController.navigate("inflationRage") // Navigate to GovtSchemesScreen
+                    navController.navigate("Government Poll") // Navigate to Govt Poll Screen
                 } catch (e: Exception) {
                     TODO("Not yet implemented")
                 }

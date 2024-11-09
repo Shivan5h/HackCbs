@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.smarcityv1.ComplainRegistration.ChatbotScreen
@@ -28,19 +29,28 @@ import com.example.smarcityv1.ComplainRegistration.MainViewModel
 import com.example.smarcityv1.DocumetSummerizer.SimplifyScreen
 import com.example.smarcityv1.GovData.InflationScreen
 import com.example.smarcityv1.GovData.InflationViewModel
+import com.example.smarcityv1.GovPolls.CreatePollScreen
+import com.example.smarcityv1.GovPolls.ParticipatePollScreen
+import com.example.smarcityv1.GovPolls.PollListScreen
+import com.example.smarcityv1.GovPolls.PollScreen
 import com.example.smarcityv1.LoginScreen.LoginScreen
 import com.example.smarcityv1.LoginScreen.LoginViewModel
 import com.example.smarcityv1.SingupScreen.NextScreen
 import com.example.smarcityv1.SingupScreen.SignUpScreen
 import com.example.smarcityv1.SingupScreen.SignUpViewModel
-import com.example.smarcityv1.mapScreen.MapScreen
+import com.example.smarcityv1.Treatment.HumanTreatmentScreen
+import com.example.smarcityv1.Treatment.TreatmentOption
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestLocationPermission()
+
         setContent {
+            LaunchedEffect(Unit) {
+                requestLocationPermission()
+            }
             SmartCityApp()
         }
     }
@@ -76,9 +86,8 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
     var showBars by remember { mutableStateOf(true) }
     val loginViewModel: LoginViewModel = viewModel()
     val singupViewModel: SignUpViewModel = viewModel()
-    val inflationViewModel : InflationViewModel = viewModel()
-    val ChatbotViewModel : MainViewModel = viewModel()
-
+    val inflationViewModel: InflationViewModel = viewModel()
+    val ChatbotViewModel: MainViewModel = viewModel()
 
     Scaffold(
         topBar = { if (showBars) TopBar() },
@@ -90,44 +99,62 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
                 MainContent(paddingValues, viewModel, navController)
             }
 
-
-
-
-            composable("mapScreen") {
+            composable("LoginScreen") {
                 showBars = false
-                MapScreen()
+                LoginScreen(loginViewModel, navController)
             }
-
-            composable("LoginScreen"){
-                showBars = false
-                LoginScreen(loginViewModel , navController)
-            }
-
             composable("SignupScreen") {
-                showBars  = false
-                SignUpScreen(navController,singupViewModel)
+                showBars = false
+                SignUpScreen(navController, singupViewModel)
             }
-
             composable("NextScreen") {
                 showBars = false
-                NextScreen(singupViewModel , navController)
+                NextScreen(singupViewModel, navController)
             }
-
             composable("inflationRage") {
                 showBars = false
-                InflationScreen(navController,inflationViewModel)
+                InflationScreen(navController, inflationViewModel)
             }
 
-            composable("simplifierScreen"){
+            composable("TreatmentScreen"){
+                showBars= false
+                TreatmentOption(navController)
+            }
+
+            composable("HumanTreatment"){
+                showBars = false
+                HumanTreatmentScreen()
+            }
+
+            composable("simplifierScreen") {
                 showBars = false
                 SimplifyScreen()
             }
             composable("ComplainChatbot") {
                 showBars = false
                 ChatbotScreen(ChatbotViewModel)
-
             }
-
+            composable("Government Poll") {
+                showBars = false
+                PollScreen(navController)
+            }
+            composable("PollScreen") {
+                PollScreen(navController)
+            }
+            composable("CreatePollScreen") {
+                CreatePollScreen()
+            }
+            composable("PollListScreen") {
+                PollListScreen(navController)
+            }
+            composable("ParticipatePollScreen/{pollId}") { backStackEntry ->
+                val pollId = backStackEntry.arguments?.getString("pollId")?.toIntOrNull()
+                if (pollId != null) {
+                    ParticipatePollScreen(navController, pollId)
+                } else {
+                    // Handle the error case where pollId is null
+                }
+            }
         }
     }
 }
