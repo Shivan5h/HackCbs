@@ -38,22 +38,22 @@ fun FeatureCards(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.4f)  // Cover the top 40% of the screen
-            .padding(0.dp),       // No padding at edges
+            .fillMaxHeight(0.4f)
+            .padding(0.dp),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(top40Height / 2),  // Divide top 40% into two equal rows
+                .height(top40Height / 2),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             FeatureCard("AR Navigator", modifier = Modifier.weight(1f)){
-                navController.navigate("mapScreen") // Navigate to MapScreen
+                navController.navigate("mapScreen")
             }
-            FeatureCard("Civic Issue Raiser", modifier = Modifier.weight(1f)){
-                navController.navigate("CivicIssueChatBot") // Navigate to CivicIssueScreen
+            FeatureCard("Register Complaints", modifier = Modifier.weight(1f)){
+                navController.navigate("ComplainChatbot")
             }
         }
         Row(
@@ -63,11 +63,15 @@ fun FeatureCards(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FeatureCard("Mental Health Chatbot", modifier = Modifier.weight(1f)) {
-                navController.navigate("chatBotScreen") // Navigate to ChatBotScreen
+            FeatureCard("Document Summerizer", modifier = Modifier.weight(1f)) {
+                navController.navigate("simplifierScreen") // Navigate to ChatBotScreen
             }
             FeatureCard("Govt Schemes", modifier = Modifier.weight(1f)){
-                navController.navigate("inflationRage") // Navigate to GovtSchemesScreen
+                try {
+                    navController.navigate("inflationRage") // Navigate to GovtSchemesScreen
+                } catch (e: Exception) {
+                    TODO("Not yet implemented")
+                }
             }
         }
     }
