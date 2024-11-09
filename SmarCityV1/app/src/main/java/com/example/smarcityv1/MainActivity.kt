@@ -26,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.smarcityv1.ComplainRegistration.ChatbotScreen
+import com.example.smarcityv1.ComplainRegistration.MainViewModel
 import com.example.smarcityv1.DocumetSummerizer.SimplifyScreen
 import com.example.smarcityv1.GovData.InflationScreen
 import com.example.smarcityv1.GovData.InflationViewModel
@@ -78,6 +79,7 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
     val loginViewModel: LoginViewModel = viewModel()
     val singupViewModel: SignUpViewModel = viewModel()
     val inflationViewModel : InflationViewModel = viewModel()
+    val ChatbotViewModel : MainViewModel = viewModel()
 
 
     Scaffold(
@@ -130,7 +132,7 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
             }
             composable("ComplainChatbot") {
                 showBars = false
-                ChatbotScreen()
+                ChatbotScreen(ChatbotViewModel)
 
             }
 
