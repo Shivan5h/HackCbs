@@ -1,9 +1,6 @@
 package com.example.smarcityv1.GovPolls
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,9 +14,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayResultsScreen(navController: NavController) {
+fun ParticipatePollScreen(navController: NavController, pollId: String?) {
+    var response by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    var polls by remember { mutableStateOf(listOf<Poll>()) }
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://3387ab99-c81c-4281-9e98-c00dda210e5f-00-3g7aaaapw29y5.picard.replit.dev/")
@@ -28,33 +25,33 @@ fun DisplayResultsScreen(navController: NavController) {
 
     val apiService = retrofit.create(ApiService::class.java)
 
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            try {
-                polls = apiService.getPolls()
-            } catch (e: Exception) {
-                // Handle error
-            }
-        }
-    }
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("View Poll Results") }
+                title = { Text("Participate in Poll") }
             )
         },
         content = { paddingValues ->
-            LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
-                items(polls) { poll ->
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clickable { navController.navigate("PollResultsScreen/${poll.id}") }) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = poll.question)
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp)
+            ) {
+                TextField(value = response, onValueChange = { response = it }, label = { Text("Your Response") })
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = {
+                    coroutineScope.launch {
+                        try {
+                            pollId?.let {
+                                apiService.participate(ParticipateRequest(it.toInt(), response))
+                                navController.navigate("PollListScreen")
+                            }
+                        } catch (e: Exception) {
+                            // Handle error
                         }
                     }
+                }) {
+                    Text("Submit Response")
                 }
             }
         }

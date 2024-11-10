@@ -1,6 +1,5 @@
 package com.example.smarcityv1.GovPolls
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,9 +16,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayResultsScreen(navController: NavController) {
+fun PollResultsScreen(navController: NavController, pollId: String?) {
     val coroutineScope = rememberCoroutineScope()
-    var polls by remember { mutableStateOf(listOf<Poll>()) }
+    var pollResponse by remember { mutableStateOf<PollResponse?>(null) }
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://3387ab99-c81c-4281-9e98-c00dda210e5f-00-3g7aaaapw29y5.picard.replit.dev/")
@@ -28,10 +27,12 @@ fun DisplayResultsScreen(navController: NavController) {
 
     val apiService = retrofit.create(ApiService::class.java)
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(pollId) {
         coroutineScope.launch {
             try {
-                polls = apiService.getPolls()
+                pollId?.let {
+                    pollResponse = apiService.getPollResults(it.toInt())
+                }
             } catch (e: Exception) {
                 // Handle error
             }
@@ -41,18 +42,21 @@ fun DisplayResultsScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("View Poll Results") }
+                title = { Text("Poll Results") }
             )
         },
         content = { paddingValues ->
-            LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
-                items(polls) { poll ->
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clickable { navController.navigate("PollResultsScreen/${poll.id}") }) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = poll.question)
+            pollResponse?.let { response ->
+                Column(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .padding(16.dp)
+                ) {
+                    Text(text = response.question, style = MaterialTheme.typography.bodyLarge)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    LazyColumn {
+                        items(response.responses) { item ->
+                            Text(text = item, modifier = Modifier.padding(vertical = 4.dp))
                         }
                     }
                 }

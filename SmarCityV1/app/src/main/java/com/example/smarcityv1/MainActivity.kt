@@ -28,8 +28,10 @@ import com.example.smarcityv1.ComplainRegistration.ChatbotScreen
 import com.example.smarcityv1.ComplainRegistration.MainViewModel
 import com.example.smarcityv1.DocumetSummerizer.SimplifyScreen
 import com.example.smarcityv1.GovPolls.CreatePollScreen
+import com.example.smarcityv1.GovPolls.DisplayPollScreen
+import com.example.smarcityv1.GovPolls.DisplayResultsScreen
 import com.example.smarcityv1.GovPolls.ParticipatePollScreen
-import com.example.smarcityv1.GovPolls.PollListScreen
+import com.example.smarcityv1.GovPolls.PollResultsScreen
 import com.example.smarcityv1.GovPolls.PollScreen
 import com.example.smarcityv1.LoginScreen.LoginScreen
 import com.example.smarcityv1.LoginScreen.LoginViewModel
@@ -110,7 +112,6 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
                 NextScreen(singupViewModel, navController)
             }
 
-
             composable("TreatmentScreen"){
                 showBars= false
                 TreatmentOption(navController)
@@ -134,26 +135,17 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
                 showBars = false
                 ChatbotScreen(ChatbotViewModel)
             }
-            composable("Government Poll") {
-                showBars = false
-                PollScreen(navController)
-            }
-            composable("PollScreen") {
-                PollScreen(navController)
-            }
-            composable("CreatePollScreen") {
-                CreatePollScreen()
-            }
-            composable("PollListScreen") {
-                PollListScreen(navController)
-            }
+            composable("PollScreen") { PollScreen(navController) }
+            composable("CreatePollScreen") { CreatePollScreen(navController) }
+            composable("PollListScreen") { DisplayPollScreen(navController) }
+            composable("DisplayResultsScreen") { DisplayResultsScreen(navController) }
             composable("ParticipatePollScreen/{pollId}") { backStackEntry ->
-                val pollId = backStackEntry.arguments?.getString("pollId")?.toIntOrNull()
-                if (pollId != null) {
-                    ParticipatePollScreen(navController, pollId)
-                } else {
-                    // Handle the error case where pollId is null
-                }
+                val pollId = backStackEntry.arguments?.getString("pollId")
+                ParticipatePollScreen(navController, pollId)
+            }
+            composable("PollResultsScreen/{pollId}") { backStackEntry ->
+                val pollId = backStackEntry.arguments?.getString("pollId")
+                PollResultsScreen(navController, pollId)
             }
         }
     }

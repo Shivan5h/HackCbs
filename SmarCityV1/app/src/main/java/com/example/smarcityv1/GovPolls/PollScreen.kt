@@ -46,6 +46,13 @@ fun PollScreen(navController: NavController) {
                     ) {
                         Text("Participate in Poll")
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { navController.navigate("DisplayResultsScreen") },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("View Poll Results")
+                    }
                 }
             }
         }

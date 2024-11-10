@@ -67,7 +67,7 @@ fun FeatureCards(navController: NavController) {
             }
             FeatureCard("Government Poll", modifier = Modifier.weight(1f)){
                 try {
-                    navController.navigate("Government Poll") // Navigate to Govt Poll Screen
+                    navController.navigate("PollScreen") // Navigate to Govt Poll Screen
                 } catch (e: Exception) {
                     TODO("Not yet implemented")
                 }
