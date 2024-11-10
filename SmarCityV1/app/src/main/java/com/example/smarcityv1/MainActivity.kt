@@ -27,8 +27,6 @@ import androidx.core.content.ContextCompat
 import com.example.smarcityv1.ComplainRegistration.ChatbotScreen
 import com.example.smarcityv1.ComplainRegistration.MainViewModel
 import com.example.smarcityv1.DocumetSummerizer.SimplifyScreen
-import com.example.smarcityv1.GovData.InflationScreen
-import com.example.smarcityv1.GovData.InflationViewModel
 import com.example.smarcityv1.GovPolls.CreatePollScreen
 import com.example.smarcityv1.GovPolls.ParticipatePollScreen
 import com.example.smarcityv1.GovPolls.PollListScreen
@@ -38,6 +36,7 @@ import com.example.smarcityv1.LoginScreen.LoginViewModel
 import com.example.smarcityv1.SingupScreen.NextScreen
 import com.example.smarcityv1.SingupScreen.SignUpScreen
 import com.example.smarcityv1.SingupScreen.SignUpViewModel
+import com.example.smarcityv1.Treatment.AnimalTreatmentScreen
 import com.example.smarcityv1.Treatment.HumanTreatmentScreen
 import com.example.smarcityv1.Treatment.TreatmentOption
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,7 +85,6 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
     var showBars by remember { mutableStateOf(true) }
     val loginViewModel: LoginViewModel = viewModel()
     val singupViewModel: SignUpViewModel = viewModel()
-    val inflationViewModel: InflationViewModel = viewModel()
     val ChatbotViewModel: MainViewModel = viewModel()
 
     Scaffold(
@@ -111,10 +109,7 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
                 showBars = false
                 NextScreen(singupViewModel, navController)
             }
-            composable("inflationRage") {
-                showBars = false
-                InflationScreen(navController, inflationViewModel)
-            }
+
 
             composable("TreatmentScreen"){
                 showBars= false
@@ -124,6 +119,11 @@ fun SmartCityApp(viewModel: SmartCityViewModel = viewModel()) {
             composable("HumanTreatment"){
                 showBars = false
                 HumanTreatmentScreen()
+            }
+
+            composable("AnimalTreatment") {
+                showBars=false
+                AnimalTreatmentScreen()
             }
 
             composable("simplifierScreen") {

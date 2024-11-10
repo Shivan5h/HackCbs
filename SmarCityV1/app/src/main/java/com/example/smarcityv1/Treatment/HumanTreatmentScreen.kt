@@ -1,115 +1,81 @@
 package com.example.smarcityv1.Treatment
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-
-
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.launch
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.smarcityv1.ComplainRegistration.HumanTreatmentViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+
+
+
 @Composable
-fun HumanTreatmentScreen(viewModel: HumanTreatmentViewModel = hiltViewModel()) {
-    var fever by remember { mutableStateOf(0) }
-    var cough by remember { mutableStateOf(0) }
-    var fatigue by remember { mutableStateOf(0) }
-    var difficultyBreathing by remember { mutableStateOf(0) }
-    var age by remember { mutableStateOf(0) }
-    var gender by remember { mutableStateOf(0) }
-    var bloodPressure by remember { mutableStateOf(0) }
-    var cholesterolLevel by remember { mutableStateOf(0) }
+fun HumanTreatmentScreen() {
+    var fever by remember { mutableStateOf("") }
+    var cough by remember { mutableStateOf("") }
+    var fatigue by remember { mutableStateOf("") }
+    var difficultyBreathing by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var bloodPressure by remember { mutableStateOf("") }
+    var cholesterolLevel by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf("") }
 
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://3387ab99-c81c-4281-9e98-c00dda210e5f-00-3g7aaaapw29y5.picard.replit.dev/")
+        .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build()))
+        .build()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Input fields for symptoms
-        OutlinedTextField(
-            value = fever.toString(),
-            onValueChange = { fever = it.toIntOrNull() ?: 0 },
-            label = { Text("Fever (0/1)") }
-        )
-        OutlinedTextField(
-            value = cough.toString(),
-            onValueChange = { cough = it.toIntOrNull() ?: 0 },
-            label = { Text("Cough (0/1)") }
-        )
-        OutlinedTextField(
-            value = fatigue.toString(),
-            onValueChange = { fatigue = it.toIntOrNull() ?: 0 },
-            label = { Text("Fatigue (0/1)") }
-        )
-        OutlinedTextField(
-            value = difficultyBreathing.toString(),
-            onValueChange = { difficultyBreathing = it.toIntOrNull() ?: 0 },
-            label = { Text("Difficulty Breathing (0/1)") }
-        )
-        OutlinedTextField(
-            value = age.toString(),
-            onValueChange = { age = it.toIntOrNull() ?: 0 },
-            label = { Text("Age") }
-        )
-        OutlinedTextField(
-            value = gender.toString(),
-            onValueChange = { gender = it.toIntOrNull() ?: 0 },
-            label = { Text("Gender (0/1)") }
-        )
-        OutlinedTextField(
-            value = bloodPressure.toString(),
-            onValueChange = { bloodPressure = it.toIntOrNull() ?: 0 },
-            label = { Text("Blood Pressure (0/1)") }
-        )
-        OutlinedTextField(
-            value = cholesterolLevel.toString(),
-            onValueChange = { cholesterolLevel = it.toIntOrNull() ?: 0 },
-            label = { Text("Cholesterol Level (0/1)") }
-        )
+    val apiService = retrofit.create(ApiService::class.java)
 
+    Column(modifier = Modifier.padding(16.dp)) {
+        TextField(value = fever, onValueChange = { fever = it }, label = { Text("Fever (1/0)") })
+        TextField(value = cough, onValueChange = { cough = it }, label = { Text("Cough (1/0)") })
+        TextField(value = fatigue, onValueChange = { fatigue = it }, label = { Text("Fatigue (1/0)") })
+        TextField(value = difficultyBreathing, onValueChange = { difficultyBreathing = it }, label = { Text("Difficulty Breathing (1/0)") })
+        TextField(value = age, onValueChange = { age = it }, label = { Text("Age") })
+        TextField(value = gender, onValueChange = { gender = it }, label = { Text("Gender (1/0)") })
+        TextField(value = bloodPressure, onValueChange = { bloodPressure = it }, label = { Text("Blood Pressure (1/0)") })
+        TextField(value = cholesterolLevel, onValueChange = { cholesterolLevel = it }, label = { Text("Cholesterol Level (1/0)") })
         Spacer(modifier = Modifier.height(16.dp))
-
         Button(onClick = {
             val symptoms = SymptomInput(
-                fever = fever,
-                cough = cough,
-                fatigue = fatigue,
-                difficulty_breathing = difficultyBreathing,
-                age = age,
-                gender = gender,
-                blood_pressure = bloodPressure,
-                cholesterol_level = cholesterolLevel
+                fever.toInt(),
+                cough.toInt(),
+                fatigue.toInt(),
+                difficultyBreathing.toInt(),
+                age.toInt(),
+                gender.toInt(),
+                bloodPressure.toInt(),
+                cholesterolLevel.toInt()
             )
-            viewModel.predictDisease(symptoms)
+            result = runBlocking {
+                try {
+                    val response = apiService.predictDisease(symptoms)
+                    "Disease: ${response.predicted_disease}, Treatment: ${response.treatment}"
+                } catch (e: Exception) {
+                    "Error: ${e.message}"
+                }
+            }
         }) {
-            Text("Predict Disease")
+            Text("Predict")
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        if (viewModel.isLoading) {
-            CircularProgressIndicator()
-        } else if (viewModel.error.isNotEmpty()) {
-            Text("Error: ${viewModel.error}", color = MaterialTheme.colorScheme.error)
-        } else {
-            Text("Predicted Disease: ${viewModel.predictedDisease}")
-            Text("Treatment: ${viewModel.treatment}")
-        }
+        Text(result)
     }
 }

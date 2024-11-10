@@ -34,7 +34,8 @@ fun TreatmentOption(navController: NavController) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
+                            .padding(8.dp)
+                            .clickable { navController.navigate("AnimalTreatment") },
                         shape = RoundedCornerShape(8.dp),
                         elevation = CardDefaults.cardElevation(4.dp)
                     ) {
@@ -53,7 +54,7 @@ fun TreatmentOption(navController: NavController) {
                             .fillMaxWidth()
                             .padding(8.dp)
                             .clickable {
-                                navController.navigate("HumanTreatmentScreen")
+                                navController.navigate("HumanTreatment")
                             },
                         shape = RoundedCornerShape(8.dp),
                         elevation = CardDefaults.cardElevation(4.dp)
@@ -61,10 +62,7 @@ fun TreatmentOption(navController: NavController) {
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth()
-                                .clickable {
-                                    navController.navigate("HumanTreatment")
-                                },
+                                .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(text = "Human Treatment", fontSize = 20.sp)
