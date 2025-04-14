@@ -1,7 +1,3 @@
-Here's a README for the [HackCbs](https://github.com/Shivan5h/HackCbs) project:
-
----
-
 # HackCbs
 
 HackCbs is a project primarily utilizing Kotlin and Python. While specific details about the project's functionality are not provided in the repository, the presence of a directory named `SmarCityV1` suggests that it may be related to smart city applications.
@@ -39,7 +35,3 @@ Contributions are welcome! If you have suggestions or improvements, feel free to
 ## License
 
 This project does not currently specify a license. Please contact the repository owner for more information.
-
----
-
-*Note: This README is based on the available information in the repository. For more detailed documentation, please refer to the project's source code or contact the repository owner.* 
