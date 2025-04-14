@@ -1,4 +1,4 @@
-# HackCbs
+# HackCBS
 
 HackCbs is a project primarily utilizing Kotlin and Python. While specific details about the project's functionality are not provided in the repository, the presence of a directory named `SmarCityV1` suggests that it may be related to smart city applications.
 
